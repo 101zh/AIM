@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
 {
     // Camera & Looking Variables
     [SerializeField] float mouseSensitvity = 0.25f;
-    Mouse curMouse;
     Camera mainCam;
     float cameraVerticalRotation;
 
@@ -27,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     // Input Stuff
     AIMInput aimInput;
+    InputAction look;
     InputAction move;
     InputAction jump;
 
@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        curMouse = Mouse.current;
         mainCam = Camera.main;
     }
 
@@ -82,26 +81,28 @@ public class PlayerController : MonoBehaviour
 
     void RotatePlayerPersepective()
     {
-        float x = curMouse.delta.x.value;
-        float y = curMouse.delta.y.value;
+        Vector2 lookDelta = look.ReadValue<Vector2>();
 
-        cameraVerticalRotation -= y;
+        cameraVerticalRotation -= lookDelta.y;
         cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
         mainCam.transform.localEulerAngles = Vector3.right * cameraVerticalRotation * mouseSensitvity;
 
-        transform.Rotate(Vector3.up * x * mouseSensitvity);
+        transform.Rotate(Vector3.up * lookDelta.x * mouseSensitvity);
     }
 
     public void OnEnable()
     {
         move = aimInput.Player.Move;
         jump = aimInput.Player.Jump;
+        look = aimInput.Player.Look;
         move.Enable();
         jump.Enable();
+        look.Enable();
     }
 
     private void OnDisable()
     {
+        look.Disable();
         move.Disable();
         jump.Enable();
     }
