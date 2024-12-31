@@ -2,20 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Vector3 moveDir = Vector3.zero;
-    [SerializeField] float mouseSensitvity = 0.5f;
-    [SerializeField] float speed = 0.01f;
-    CharacterController characterController;
+    // Camera & Looking Variables
+    [SerializeField] float mouseSensitvity = 0.25f;
     Mouse curMouse;
     Camera mainCam;
     float cameraVerticalRotation;
 
+    //Movement Stuff
+    [SerializeField] Vector3 moveDir = Vector3.zero;
+    [SerializeField] float speed = 5f;
+    [SerializeField] float jumpHeight = 1.75f;
+    [SerializeField] float gravity = -9.81f;
+
+    [SerializeField] Transform groundCheck;
+    [SerializeField] float groundDistance = 0.1f;
+    [SerializeField] LayerMask groundMask;
+
+    CharacterController characterController;
+    bool isGrounded;
+    Vector3 curVelocity;
+
+    // Input Stuff
     AIMInput aimInput;
     InputAction move;
+    InputAction jump;
 
     private void Awake()
     {
@@ -41,18 +54,30 @@ public class PlayerController : MonoBehaviour
 
     void MovePlayer()
     {
-        Debug.Log(transform.forward + ", " + transform.up + ", " + transform.right);
-
-        moveDir = Vector3.zero;
-
-        Vector2 playerMovement = move.ReadValue<Vector2>();
-
-        moveDir += playerMovement.y * transform.forward;
-        moveDir += playerMovement.x * transform.right;
-
-        //moveDir += Physics.gravity;
+        // X & Z Movement
+        Vector2 movementInput = move.ReadValue<Vector2>();
+        moveDir = movementInput.y * transform.forward + movementInput.x * transform.right;
         moveDir.Normalize();
-        characterController.Move(moveDir * speed);
+
+        characterController.Move(moveDir * speed * Time.deltaTime);
+
+        // Y Movement
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        // Jumping
+        if (jump.IsPressed() && isGrounded)
+        {
+            curVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+
+        // If player reaches ground and is still falling
+        if (isGrounded && curVelocity.y < 0)
+        {
+            curVelocity.y = -1f; // Vertical velocity is still -1 to guarantee that player moves to ground
+        }
+        curVelocity.y += gravity * Time.deltaTime;
+
+        characterController.Move(curVelocity * Time.deltaTime);
     }
 
     void RotatePlayerPersepective()
@@ -70,11 +95,14 @@ public class PlayerController : MonoBehaviour
     public void OnEnable()
     {
         move = aimInput.Player.Move;
+        jump = aimInput.Player.Jump;
         move.Enable();
+        jump.Enable();
     }
 
     private void OnDisable()
     {
         move.Disable();
+        jump.Enable();
     }
 }
