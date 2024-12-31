@@ -245,9 +245,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDir: {x: 0, y: 0, z: 0}
+  mouseSensitvity: 0.25
   speed: 0.01
-  x: 0
-  y: 0
 --- !u!143 &225060906
 CharacterController:
   m_ObjectHideFlags: 0

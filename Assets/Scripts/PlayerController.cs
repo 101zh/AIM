@@ -7,18 +7,26 @@ using UnityEngine.Windows;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] Vector3 moveDir = Vector3.zero;
+    [SerializeField] float mouseSensitvity = 0.5f;
     [SerializeField] float speed = 0.01f;
     CharacterController characterController;
     Mouse curMouse;
     Camera mainCam;
-    [SerializeField] float x;
-    [SerializeField] float y;
     float cameraVerticalRotation;
+
+    AIMInput aimInput;
+    InputAction move;
+
+    private void Awake()
+    {
+        characterController = GetComponent<CharacterController>();
+        aimInput = new AIMInput();
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         curMouse = Mouse.current;
         mainCam = Camera.main;
@@ -27,27 +35,46 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        x = curMouse.delta.x.value;
-        y = curMouse.delta.y.value;
-
-        cameraVerticalRotation -= y;
-        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
-        mainCam.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
-
-        transform.Rotate(Vector3.up * x);
+        RotatePlayerPersepective();
         MovePlayer();
     }
 
     void MovePlayer()
     {
-        moveDir.z = Keyboard.current.wKey.isPressed ? 1 : 0;
-        moveDir.z = (Keyboard.current.sKey.isPressed && moveDir.z == 0) ? -1 : moveDir.z;
-        moveDir.x = Keyboard.current.aKey.isPressed ? -1 : 0;
-        moveDir.x = (Keyboard.current.dKey.isPressed && moveDir.x == 0) ? 1 : moveDir.x;
+        Debug.Log(transform.forward + ", " + transform.up + ", " + transform.right);
 
+        moveDir = Vector3.zero;
+
+        Vector2 playerMovement = move.ReadValue<Vector2>();
+
+        moveDir += playerMovement.y * transform.forward;
+        moveDir += playerMovement.x * transform.right;
 
         //moveDir += Physics.gravity;
         moveDir.Normalize();
         characterController.Move(moveDir * speed);
+    }
+
+    void RotatePlayerPersepective()
+    {
+        float x = curMouse.delta.x.value;
+        float y = curMouse.delta.y.value;
+
+        cameraVerticalRotation -= y;
+        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
+        mainCam.transform.localEulerAngles = Vector3.right * cameraVerticalRotation * mouseSensitvity;
+
+        transform.Rotate(Vector3.up * x * mouseSensitvity);
+    }
+
+    public void OnEnable()
+    {
+        move = aimInput.Player.Move;
+        move.Enable();
+    }
+
+    private void OnDisable()
+    {
+        move.Disable();
     }
 }
