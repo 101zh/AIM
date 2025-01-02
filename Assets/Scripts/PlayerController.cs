@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         RotatePlayerPersepective();
         MovePlayer();
+        FireRaycastShot();
     }
 
     void MovePlayer()
@@ -81,13 +82,22 @@ public class PlayerController : MonoBehaviour
 
     void RotatePlayerPersepective()
     {
-        Vector2 lookDelta = look.ReadValue<Vector2>();
+        Vector2 lookDelta = look.ReadValue<Vector2>() * mouseSensitvity;
 
         cameraVerticalRotation -= lookDelta.y;
         cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
-        mainCam.transform.localEulerAngles = Vector3.right * cameraVerticalRotation * mouseSensitvity;
+        mainCam.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
 
-        transform.Rotate(Vector3.up * lookDelta.x * mouseSensitvity);
+        transform.Rotate(Vector3.up * lookDelta.x);
+    }
+
+    void FireRaycastShot()
+    {
+        Ray ray = new Ray(mainCam.transform.position, mainCam.transform.forward);
+        if (Physics.Raycast(ray))
+        {
+            Debug.Log("ray hit");
+        }
     }
 
     public void OnEnable()
