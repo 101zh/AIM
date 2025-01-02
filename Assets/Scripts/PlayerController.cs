@@ -5,11 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    // Camera & Looking Variables
-    [SerializeField] float mouseSensitvity = 0.25f;
-    Camera mainCam;
-    float cameraVerticalRotation;
-
     //Movement Stuff
     [SerializeField] Vector3 moveDir = Vector3.zero;
     [SerializeField] float speed = 5f;
@@ -26,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     // Input Stuff
     AIMInput aimInput;
-    InputAction look;
     InputAction move;
     InputAction jump;
 
@@ -38,18 +32,12 @@ public class PlayerController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        mainCam = Camera.main;
-    }
+    void Start(){}
 
     // Update is called once per frame
     void Update()
     {
-        RotatePlayerPersepective();
         MovePlayer();
-        FireRaycastShot();
     }
 
     void MovePlayer()
@@ -80,40 +68,17 @@ public class PlayerController : MonoBehaviour
         characterController.Move(curVelocity * Time.deltaTime);
     }
 
-    void RotatePlayerPersepective()
-    {
-        Vector2 lookDelta = look.ReadValue<Vector2>() * mouseSensitvity;
-
-        cameraVerticalRotation -= lookDelta.y;
-        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
-        mainCam.transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
-
-        transform.Rotate(Vector3.up * lookDelta.x);
-    }
-
-    void FireRaycastShot()
-    {
-        Ray ray = new Ray(mainCam.transform.position, mainCam.transform.forward);
-        if (Physics.Raycast(ray))
-        {
-            Debug.Log("ray hit");
-        }
-    }
-
     public void OnEnable()
     {
         move = aimInput.Player.Move;
         jump = aimInput.Player.Jump;
-        look = aimInput.Player.Look;
         move.Enable();
         jump.Enable();
-        look.Enable();
     }
 
     private void OnDisable()
     {
-        look.Disable();
         move.Disable();
-        jump.Enable();
+        jump.Disable();
     }
 }

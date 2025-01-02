@@ -1,0 +1,61 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class FirstPersonCameraMovement : MonoBehaviour
+{
+    // Camera & Looking Variables
+    [SerializeField] float mouseSensitvity = 0.25f;
+    [SerializeField] Transform player;
+    float cameraVerticalRotation;
+
+    // Input Stuff
+    AIMInput aimInput;
+    InputAction look;
+
+    private void Awake()
+    {
+        aimInput = new AIMInput();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Vector2 lookDelta = look.ReadValue<Vector2>() * mouseSensitvity;
+
+        cameraVerticalRotation -= lookDelta.y;
+        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
+        transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
+
+        player.Rotate(Vector3.up * lookDelta.x);
+
+        FireRaycastShot();
+    }
+
+    void FireRaycastShot()
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray))
+        {
+            Debug.Log("ray hit");
+        }
+    }
+
+    public void OnEnable()
+    {
+        look = aimInput.Player.Look;
+        look.Enable();
+    }
+
+    private void OnDisable()
+    {
+        look.Disable();
+    }
+}
