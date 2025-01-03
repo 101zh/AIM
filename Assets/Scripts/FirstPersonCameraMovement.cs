@@ -35,17 +35,6 @@ public class FirstPersonCameraMovement : MonoBehaviour
         transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
 
         player.Rotate(Vector3.up * lookDelta.x);
-
-        FireRaycastShot();
-    }
-
-    void FireRaycastShot()
-    {
-        Ray ray = new Ray(transform.position, transform.forward);
-        if (Physics.Raycast(ray))
-        {
-            Debug.Log("ray hit");
-        }
     }
 
     public void OnEnable()
