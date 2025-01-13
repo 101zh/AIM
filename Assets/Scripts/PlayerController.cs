@@ -30,7 +30,13 @@ public class PlayerController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start(){}
+    void Start()
+    {
+        move = GameManager.move;
+        jump = GameManager.jump;
+        move.Enable();
+        jump.Enable();
+    }
 
     // Update is called once per frame
     void Update()
@@ -68,10 +74,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnEnable()
     {
-        move = GameManager.move;
-        jump = GameManager.jump;
-        move.Enable();
-        jump.Enable();
+        if (move != null) move.Enable();
+        if (jump != null) jump.Enable();
     }
 
     private void OnDisable()

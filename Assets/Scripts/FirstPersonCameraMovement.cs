@@ -16,6 +16,8 @@ public class FirstPersonCameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        look = GameManager.look;
+        look.Enable();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -33,8 +35,7 @@ public class FirstPersonCameraMovement : MonoBehaviour
 
     public void OnEnable()
     {
-        look = GameManager.look;
-        look.Enable();
+        if (look != null) look.Enable();
     }
 
     private void OnDisable()

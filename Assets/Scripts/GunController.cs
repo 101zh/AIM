@@ -14,7 +14,8 @@ public class GunController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        fire = GameManager.fire;
+        fire.Enable();
     }
 
     // Update is called once per frame
@@ -34,10 +35,10 @@ public class GunController : MonoBehaviour
             Destroy(hitInfo.transform.gameObject);
         }
     }
+
     public void OnEnable()
     {
-        fire = GameManager.aimInput.Player.Fire;
-        fire.Enable();
+        if (fire != null) fire.Enable();
     }
 
     private void OnDisable()
