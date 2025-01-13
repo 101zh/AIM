@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
         // If player reaches ground and is still falling
         if (isGrounded && curVelocity.y < 0)
         {
-            curVelocity.y = -1f; // Vertical velocity is still -1 to guarantee that player moves to ground
+            curVelocity.y = -2.5f; // Vertical velocity is still -2.5 to guarantee that player moves to ground
         }
         curVelocity.y += gravity * Time.deltaTime;
 
