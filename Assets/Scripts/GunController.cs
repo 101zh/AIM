@@ -9,13 +9,7 @@ public class GunController : MonoBehaviour
     [SerializeField] LayerMask targetLayerMask;
 
     // Input Stuff
-    AIMInput aimInput;
     InputAction fire;
-
-    private void Awake()
-    {
-        aimInput = new AIMInput();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +36,7 @@ public class GunController : MonoBehaviour
     }
     public void OnEnable()
     {
-        fire = aimInput.Player.Fire;
+        fire = GameManager.aimInput.Player.Fire;
         fire.Enable();
     }
 

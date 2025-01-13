@@ -11,13 +11,7 @@ public class FirstPersonCameraMovement : MonoBehaviour
     float cameraVerticalRotation;
 
     // Input Stuff
-    AIMInput aimInput;
     InputAction look;
-
-    private void Awake()
-    {
-        aimInput = new AIMInput();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +33,7 @@ public class FirstPersonCameraMovement : MonoBehaviour
 
     public void OnEnable()
     {
-        look = aimInput.Player.Look;
+        look = GameManager.look;
         look.Enable();
     }
 

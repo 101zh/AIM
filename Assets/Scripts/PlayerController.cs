@@ -20,14 +20,12 @@ public class PlayerController : MonoBehaviour
     Vector3 curVelocity;
 
     // Input Stuff
-    AIMInput aimInput;
     InputAction move;
     InputAction jump;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        aimInput = new AIMInput();
     }
 
 
@@ -70,8 +68,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnEnable()
     {
-        move = aimInput.Player.Move;
-        jump = aimInput.Player.Jump;
+        move = GameManager.move;
+        jump = GameManager.jump;
         move.Enable();
         jump.Enable();
     }
