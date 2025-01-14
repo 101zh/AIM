@@ -17,7 +17,7 @@ public class FirstPersonCameraMovement : MonoBehaviour
     void Start()
     {
         look = GameManager.look;
-        look.Enable();
+        OnEnable();
         Cursor.lockState = CursorLockMode.Locked;
     }
 

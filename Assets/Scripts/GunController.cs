@@ -15,7 +15,7 @@ public class GunController : MonoBehaviour
     void Start()
     {
         fire = GameManager.fire;
-        fire.Enable();
+        OnEnable();
     }
 
     // Update is called once per frame
