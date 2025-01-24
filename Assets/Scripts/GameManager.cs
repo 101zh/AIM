@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
 {
     static GameManager instance;
 
+    [SerializeField] GameObject pauseMenu;
+    private bool isPaused = false;
+
+    [ContextMenuItem("updateAverageStats", "updateAverageStats")]
     [ContextMenuItem("updateAverageShotDelay", "updateAverageShotDelay")]
     [SerializeField] float averageShotDelay;
 
@@ -50,7 +54,46 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            if (isPaused)
+            {
+                ResumeGame();
+            }
+            else if (!isPaused)
+            {
+                PauseGame();
+            }
 
+        }
+    }
+
+    void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+        pauseMenu.SetActive(true);
+        aimInput.Player.Disable();
+    }
+
+    void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Locked;
+        pauseMenu.SetActive(false);
+        aimInput.Player.Enable();
+    }
+
+    [ContextMenu("updateAverageStats")]
+    void updateAverageStats()
+    {
+        PracticeStats averagePracticeStats = PracticeSessionManager.instance.GetAveragePracticeStats();
+        averageShotDelay = averagePracticeStats.shotDelay;
+        averageMisses = averagePracticeStats.missFires;
+        averageOvershoot = averagePracticeStats.overShoot;
+        averageTimeToKillTarget = averagePracticeStats.timeToKillTarget;
     }
 
     [ContextMenu("updateAverageShotDelay")]
