@@ -29,9 +29,14 @@ public class PracticeSessionManager : MonoBehaviour
         Instantiate(target, new Vector3(Random.Range(0.5f, 2f), Random.Range(0.5f, 2f), 9), target.transform.rotation);
     }
 
-    public void addNewHitTime(float hitTime)
+    public void addNewTimeToKill(float hitTime)
     {
         timeToKillTarget.Add(hitTime);
+    }
+
+    public void addNewShotDelay(float delay)
+    {
+        shotDelays.Add(delay);
     }
 
     public void addNewMissCount(int missFireCount)
@@ -42,11 +47,6 @@ public class PracticeSessionManager : MonoBehaviour
     public void addNewOverShootValue(float overshoot)
     {
         overShootValues.Add(overshoot);
-    }
-
-    public void addNewShotDelay(float delay)
-    {
-        shotDelays.Add(delay);
     }
 
     public float getAverageTimeToKillTarget()
@@ -67,5 +67,34 @@ public class PracticeSessionManager : MonoBehaviour
     public float getAverageOverShoot()
     {
         return overShootValues.Sum() / overShootValues.Count;
+    }
+
+    public void addNewPraticeDataSet(PracticeStats newPracticeStatsSet)
+    {
+        addNewTimeToKill(newPracticeStatsSet.timeToKillTarget);
+        addNewShotDelay(newPracticeStatsSet.shotDelay);
+        addNewMissCount((int)newPracticeStatsSet.missFires);
+        addNewOverShootValue(newPracticeStatsSet.overShoot);
+    }
+
+    public PracticeStats GetAveragePracticeStats()
+    {
+        return new PracticeStats(getAverageShotDelay(), getAverageMisses(), getAverageOverShoot(), getAverageTimeToKillTarget());
+    }
+}
+
+public class PracticeStats
+{
+    public float shotDelay { get; private set; }
+    public float missFires { get; private set; }
+    public float overShoot { get; private set; }
+    public float timeToKillTarget { get; private set; }
+
+    public PracticeStats(float shotDelay, float missFires, float overShoot, float timeToKillTarget)
+    {
+        this.shotDelay = shotDelay;
+        this.missFires = missFires;
+        this.overShoot = overShoot;
+        this.timeToKillTarget = timeToKillTarget;
     }
 }

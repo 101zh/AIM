@@ -88,10 +88,7 @@ public class GunController : MonoBehaviour
 
     void sendPerTargetVariablesToManager()
     {
-        sessionManagerInstance.addNewHitTime(timeToKillTarget);
-        sessionManagerInstance.addNewShotDelay(shotDelay+Time.deltaTime);
-        sessionManagerInstance.addNewMissCount(missFireCount);
-        sessionManagerInstance.addNewOverShootValue(overShoot.magnitude);
+        sessionManagerInstance.addNewPraticeDataSet(new PracticeStats(shotDelay + Time.deltaTime, missFireCount, overShoot.magnitude, timeToKillTarget));
     }
 
     void resetPerTargetVariables()
