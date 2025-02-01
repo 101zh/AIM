@@ -10,7 +10,8 @@ You should see my stats (┬┬﹏┬┬) (they aren't good).
 ### Overshoot
 
 When the crosshair lands on a target but looses the target, the game starts tracking how much the mouse moves.
-This amount is the overshoot, it is tracked because ideally once you arrive at a target you overshoot and miss it.
+This amount is the overshoot, it is tracked because ideally once you arrive at a target you don't overshoot and miss it.\
+(Should ideally be 0)
 
 ### Shot Delay
 
