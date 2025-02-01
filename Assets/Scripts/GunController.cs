@@ -30,7 +30,6 @@ public class GunController : MonoBehaviour
         look = GameManager.look;
         sessionManagerInstance = PracticeSessionManager.instance;
         sessionManagerInstance.onTargetInView += startTrackingTimeToKillTarget;
-        OnEnable();
     }
 
     // Update is called once per frame

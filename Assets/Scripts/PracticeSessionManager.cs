@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PracticeSessionManager : MonoBehaviour
 {
 
     public static PracticeSessionManager instance;
+    [SerializeField] int numToShoot = 25;
+    [SerializeField] int numShot = 0;
 
     [SerializeField] private GameObject target;
+
+    [SerializeField] private Transform topRight;
+    [SerializeField] private Transform bottomLeft;
 
     private List<float> shotDelays = new List<float>();
     private List<int> missFires = new List<int>();
@@ -21,12 +27,20 @@ public class PracticeSessionManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        createNewTarget();
     }
 
     public void createNewTarget()
     {
-        Instantiate(target, new Vector3(Random.Range(0.5f, 2f), Random.Range(0.5f, 2f), 9), target.transform.rotation);
+        numShot++;
+
+        if (numShot >= numToShoot)
+        {
+            GameManager.instance.endPracticeSession();
+            return;
+        }
+        Vector3 position = new Vector3(Random.Range(bottomLeft.position.x, topRight.position.x), Random.Range(bottomLeft.position.y, topRight.position.y), Random.Range(bottomLeft.position.z, topRight.position.z));
+
+        Instantiate(target, position, target.transform.rotation);
     }
 
     public void addNewTimeToKill(float hitTime)

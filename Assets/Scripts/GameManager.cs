@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    static GameManager instance;
+    public static GameManager instance;
 
+    [SerializeField] ResultsMenu resultsMenu;
+    [SerializeField] GameObject mainMenu;
+    [SerializeField] GameObject controlsMenu;
     [SerializeField] GameObject pauseMenu;
+
     private bool isPaused = false;
 
     [ContextMenuItem("updateAverageStats", "updateAverageStats")]
@@ -42,13 +47,18 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
         aimInput = new AIMInput();
         look = aimInput.Player.Look;
         fire = aimInput.Player.Fire;
         jump = aimInput.Player.Jump;
         move = aimInput.Player.Move;
+    }
+
+    private void Start()
+    {
+        aimInput.Player.Disable();
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
@@ -64,7 +74,6 @@ public class GameManager : MonoBehaviour
             {
                 PauseGame();
             }
-
         }
     }
 
@@ -77,13 +86,20 @@ public class GameManager : MonoBehaviour
         aimInput.Player.Disable();
     }
 
-    void ResumeGame()
+    public void ResumeGame()
     {
         isPaused = false;
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         pauseMenu.SetActive(false);
         aimInput.Player.Enable();
+    }
+
+    public void endPracticeSession()
+    {
+        resultsMenu.activateAndUpdateVlaues(PracticeSessionManager.instance.GetAveragePracticeStats());
+        aimInput.Player.Disable();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     [ContextMenu("updateAverageStats")]
@@ -118,5 +134,23 @@ public class GameManager : MonoBehaviour
     void updateAverageTimeToKillTarget()
     {
         averageTimeToKillTarget = PracticeSessionManager.instance.getAverageTimeToKillTarget();
+    }
+
+    public void StartSession()
+    {
+        Time.timeScale = 1;
+        aimInput.Player.Enable();
+        Cursor.lockState = CursorLockMode.Locked;
+        mainMenu.SetActive(false);
+    }
+
+    public void quitApp()
+    {
+        Application.Quit();
+    }
+
+    public void reloadScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }

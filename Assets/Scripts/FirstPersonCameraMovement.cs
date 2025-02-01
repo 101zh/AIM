@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,8 +15,6 @@ public class FirstPersonCameraMovement : MonoBehaviour
     void Start()
     {
         look = GameManager.look;
-        OnEnable();
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame

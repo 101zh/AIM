@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     {
         move = GameManager.move;
         jump = GameManager.jump;
-        OnEnable();
     }
 
     // Update is called once per frame
