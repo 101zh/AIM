@@ -1,6 +1,30 @@
 # AIM
 
+## Overview
+
 A minimal FPS that you can practice in.
+
+## Links
+- [Itch](https://101zh.itch.io/aim) <- This is where you play the game!
+- 101zh - [Github](https://github.com/101zh), [Itch](https://101zh.itch.io/)
+
+## 3rd Party Assets/Libraries
+- TextMeshPro
+- Fonts used
+    - Ark Pixel Font - https://github.com/TakWolf/ark-pixel-font
+    - Retro Pixel Font - https://github.com/TakWolf/retro-pixel-font
+    - Jost Font - https://github.com/indestructible-type/Jost
+
+## Workspace
+- Unity Version 2022.3.38f1
+- Visual Studio or VS Code
+- TextMeshPro
+- New Input System
+- Keyboard & Mouse
+
+## Credits
+Game development: 101zh\
+3D Modeling: 101zh
 
 ## What do the Statistics Mean?
 
